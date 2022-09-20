@@ -6,8 +6,9 @@ import { z } from "zod";
  * This way you can ensure the app isn't built with invalid env vars.
  */
 export const serverSchema = z.object({
-  DATABASE_URL: z.string().url(),
   NODE_ENV: z.enum(["development", "test", "production"]),
+  TWITCH_CLIENT_ID: z.string(),
+  TWITCH_TOKEN: z.string(),
 });
 
 /**
