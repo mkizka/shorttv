@@ -1,6 +1,3 @@
-# 以下を改変
-# https://create-t3-app-t3-oss.vercel.app/en/deployment/docker
-
 ########################
 #         DEPS         #
 ########################
@@ -13,11 +10,16 @@ RUN apk add --no-cache libc6-compat openssl
 WORKDIR /app
 
 # Install Prisma Client - remove if not using Prisma
-copy prisma ./
+COPY prisma ./
 
 # Install dependencies based on the preferred package manager
-COPY package.json pnpm-lock.yaml ./
-RUN npm i -g pnpm && pnpm i
+COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
+RUN \
+  if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
+  elif [ -f package-lock.json ]; then npm ci; \
+  elif [ -f pnpm-lock.yaml ]; then yarn global add pnpm && pnpm i; \
+  else echo "Lockfile not found." && exit 1; \
+  fi
 
 ########################
 #        BUILDER       #
@@ -67,7 +69,8 @@ RUN adduser --system --uid 1001 nextjs
 COPY --from=builder /app/next.config.mjs ./
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/package.json ./package.json
-COPY --from=builder /app/prisma/db.sqlite /app/db.sqlite
+RUN mkdir /app/prisma
+COPY --from=builder /app/prisma/db.sqlite /app/prisma/db.sqlite
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing

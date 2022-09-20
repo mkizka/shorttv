@@ -29,8 +29,4 @@ async function main() {
   }
 }
 
-async function main2() {
-  console.log(await prisma.game.findFirst());
-}
-
-main2();
+main();
