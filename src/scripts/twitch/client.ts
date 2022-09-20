@@ -1,8 +1,8 @@
 import { StaticAuthProvider } from "@twurple/auth";
 import { ApiClient } from "@twurple/api";
 
-import { env } from "../../env/server";
 import { wrappedGetStreams } from "./api/getStreams";
+import { env } from "./env";
 
 const authProvider = new StaticAuthProvider(
   env.TWITCH_CLIENT_ID,

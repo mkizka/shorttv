@@ -1,5 +1,5 @@
 import { prisma } from "../server/db/client";
-import { twitch } from "../server/twitch/client";
+import { twitch } from "./twitch/client";
 
 async function getUserIdsInDatabase() {
   const results = await prisma.user.findMany({
@@ -29,4 +29,8 @@ async function main() {
   }
 }
 
-main();
+async function main2() {
+  console.log(await prisma.game.findFirst());
+}
+
+main2();

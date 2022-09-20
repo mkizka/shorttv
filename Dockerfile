@@ -16,13 +16,8 @@ WORKDIR /app
 copy prisma ./
 
 # Install dependencies based on the preferred package manager
-COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
-RUN \
-  if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
-  elif [ -f package-lock.json ]; then npm ci; \
-  elif [ -f pnpm-lock.yaml ]; then yarn global add pnpm && pnpm i; \
-  else echo "Lockfile not found." && exit 1; \
-  fi
+COPY package.json pnpm-lock.yaml ./
+RUN npm i -g pnpm && pnpm i
 
 ########################
 #        BUILDER       #
@@ -31,6 +26,11 @@ RUN \
 # Rebuild the source code only when needed
 # TODO: re-evaluate if emulation is still necessary on arm64 after moving to node 18
 FROM --platform=linux/amd64 node:16-alpine AS builder
+
+ARG TWITCH_CLIENT_ID
+ENV TWITCH_CLIENT_ID=${TWITCH_CLIENT_ID}
+ARG TWITCH_TOKEN
+ENV TWITCH_TOKEN=${TWITCH_TOKEN}
 
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
@@ -41,7 +41,11 @@ COPY . .
 # Uncomment the following line in case you want to disable telemetry during the build.
 # ENV NEXT_TELEMETRY_DISABLED 1
 
-RUN yarn prisma migrate deploy && yarn build
+RUN npm i -g pnpm &&\
+  pnpm prisma generate &&\
+  pnpm prisma migrate deploy &&\
+  pnpm fetchStreams &&\
+  pnpm build
 
 ########################
 #        RUNNER        #
@@ -63,6 +67,7 @@ RUN adduser --system --uid 1001 nextjs
 COPY --from=builder /app/next.config.mjs ./
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/prisma/db.sqlite /app/db.sqlite
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing

@@ -1,9 +1,9 @@
 import { createRouter } from "./context";
-import { twitch } from "../twitch/client";
+import { prisma } from "../db/client";
 
 export const exampleRouter = createRouter() //
   .query("getStreams", {
     async resolve() {
-      return await twitch.getStreams();
+      return await prisma.user.findMany();
     },
   });
