@@ -1,5 +1,5 @@
 // src/server/db/client.ts
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "../../.prisma";
 import { env } from "../../env/server.mjs";
 
 export const prisma: PrismaClient =
