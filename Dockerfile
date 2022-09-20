@@ -1,11 +1,19 @@
 # 以下を改変
-# https://github.com/vercel/next.js/blob/642d52e1ac9ef5a6f8f3bcfe4042a6c569927523/examples/with-docker/Dockerfile
+# https://create-t3-app-t3-oss.vercel.app/en/deployment/docker
+
+########################
+#         DEPS         #
+########################
 
 # Install dependencies only when needed
-FROM node:16-alpine AS deps
+# TODO: re-evaluate if emulation is still necessary on arm64 after moving to node 18
+FROM --platform=linux/amd64 node:16-alpine AS deps
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
-RUN apk add --no-cache libc6-compat
+RUN apk add --no-cache libc6-compat openssl
 WORKDIR /app
+
+# Install Prisma Client - remove if not using Prisma
+copy prisma ./
 
 # Install dependencies based on the preferred package manager
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
@@ -16,9 +24,14 @@ RUN \
   else echo "Lockfile not found." && exit 1; \
   fi
 
+########################
+#        BUILDER       #
+########################
 
 # Rebuild the source code only when needed
-FROM node:16-alpine AS builder
+# TODO: re-evaluate if emulation is still necessary on arm64 after moving to node 18
+FROM --platform=linux/amd64 node:16-alpine AS builder
+
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
@@ -28,13 +41,21 @@ COPY . .
 # Uncomment the following line in case you want to disable telemetry during the build.
 # ENV NEXT_TELEMETRY_DISABLED 1
 
-RUN yarn prisma migrate deploy && yarn build
+RUN \
+  if [ -f yarn.lock ]; then yarn build; \
+  elif [ -f package-lock.json ]; then npm run build; \
+  elif [ -f pnpm-lock.yaml ]; then yarn global add pnpm && pnpm run build; \
+  else echo "Lockfile not found." && exit 1; \
+  fi
 
-# If using npm comment out above and use below instead
-# RUN npm run build
+########################
+#        RUNNER        #
+########################
 
 # Production image, copy all the files and run next
-FROM node:16-alpine AS runner
+# TODO: re-evaluate if emulation is still necessary after moving to node 18
+FROM --platform=linux/amd64 node:16-alpine AS runner
+# WORKDIR /usr/app
 WORKDIR /app
 
 ENV NODE_ENV production
@@ -44,7 +65,9 @@ ENV NODE_ENV production
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
+COPY --from=builder /app/next.config.mjs ./
 COPY --from=builder /app/public ./public
+COPY --from=builder /app/package.json ./package.json
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing

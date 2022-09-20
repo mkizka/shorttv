@@ -1,5 +1,5 @@
 import { ApiClient } from "@twurple/api";
-import { Game, User } from "@prisma/client";
+import { Game, User } from "../../../.prisma";
 
 export const wrappedGetStreams = (twitch: ApiClient) => async () => {
   const result = await twitch.streams.getStreams({ language: "ja" });
