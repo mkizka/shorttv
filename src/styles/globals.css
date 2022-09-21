@@ -1,3 +1,28 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+html,
+body,
+#__next {
+  @apply h-full overflow-hidden m-0;
+}
+
+.player {
+  @apply w-full h-[calc(100%-100px)];
+  @apply md:w-[calc(100%-100px)] md:h-full;
+}
+
+.player-container > .swiper-button-prev,
+.swiper-button-next {
+  @apply rotate-90 p-[50px] m-0 w-0 h-0;
+}
+
+.player-container > .swiper-button-prev {
+  @apply right-auto left-0 top-auto bottom-0;
+  @apply md:right-0 md:left-auto md:top-0 md:bottom-auto;
+}
+
+.player-container > .swiper-button-next {
+  @apply right-0 left-auto top-auto bottom-0;
+}

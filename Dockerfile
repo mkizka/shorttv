@@ -26,6 +26,7 @@ COPY . .
 RUN yarn global add pnpm &&\
   pnpm prisma migrate deploy &&\
   pnpm fetchStreams &&\
+  pnpm fetchClips &&\
   pnpm build
 
 ########################

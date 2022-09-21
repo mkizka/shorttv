@@ -4,6 +4,10 @@ import { loggerLink } from "@trpc/client/links/loggerLink";
 import { withTRPC } from "@trpc/next";
 import type { AppType } from "next/dist/shared/lib/utils";
 import superjson from "superjson";
+import "swiper/css";
+import "swiper/css/keyboard";
+import "swiper/css/navigation";
+
 import type { AppRouter } from "../server/router";
 import "../styles/globals.css";
 
