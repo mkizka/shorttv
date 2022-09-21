@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "fetchStreams": "NODE_ENV=production ts-node -P tsconfig.scripts.json src/scripts/fetchStreams.ts",
+    "fetchStreams": "ts-node -P tsconfig.scripts.json src/scripts/fetchStreams.ts",
+    "fetchClips": "ts-node -P tsconfig.scripts.json src/scripts/fetchClips.ts",
     "postinstall": "prisma generate"
   },
   "dependencies": {

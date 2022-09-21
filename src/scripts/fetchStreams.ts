@@ -1,19 +1,6 @@
 import { prisma } from "../server/db/client";
 import { twitch } from "./twitch/client";
-
-async function getUserIdsInDatabase() {
-  const results = await prisma.user.findMany({
-    select: { id: true },
-  });
-  return results.map((result) => result.id);
-}
-
-async function getGameIdsInDatabase() {
-  const results = await prisma.game.findMany({
-    select: { id: true },
-  });
-  return results.map((result) => result.id);
-}
+import { getGameIdsInDatabase, getUserIdsInDatabase } from "./utils";
 
 async function main() {
   const { games, users } = await twitch.getStreams();
@@ -29,4 +16,4 @@ async function main() {
   }
 }
 
-main();
+main().catch(console.error);

@@ -13,14 +13,12 @@ datasource db {
 model Game {
     id   String @id
     name String
-    Clip Clip[]
 }
 
 model User {
     id          String @id
     name        String
     displayName String
-    Clip        Clip[]
 }
 
 model Clip {
@@ -28,10 +26,10 @@ model Clip {
     url           String
     embedUrl      String
     broadcasterId String
-    broadcaster   User     @relation(fields: [broadcasterId], references: [id])
+    // broadcaster   User     @relation(fields: [broadcasterId], references: [id])
     videoId       String
     gameId        String
-    game          Game     @relation(fields: [gameId], references: [id])
+    // game          Game     @relation(fields: [gameId], references: [id])
     language      String
     title         String
     createdAt     DateTime

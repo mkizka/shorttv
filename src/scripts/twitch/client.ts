@@ -2,6 +2,7 @@ import { StaticAuthProvider } from "@twurple/auth";
 import { ApiClient } from "@twurple/api";
 
 import { wrappedGetStreams } from "./api/getStreams";
+import { wrappedGetClipsForBroadcaster } from "./api/getClips";
 import { env } from "./env";
 
 const authProvider = new StaticAuthProvider(
@@ -13,4 +14,5 @@ const api = new ApiClient({ authProvider });
 
 export const twitch = {
   getStreams: wrappedGetStreams(api),
+  getClips: wrappedGetClipsForBroadcaster(api),
 };
