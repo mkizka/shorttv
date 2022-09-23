@@ -2,7 +2,11 @@
 module.exports = {
   content: ["./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        twitch: "rgb(169, 112, 255)",
+      },
+    },
   },
   plugins: [],
 };
