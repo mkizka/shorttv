@@ -65,7 +65,6 @@ export function ClipPlayerContainer({
           </SwiperSlide>
         );
       })}
-      <div className="w-full h-[100px] bottom-0 md:w-[100px] md:h-full md:right-0 absolute bg-black z-[1] pointer-events-none" />
     </Swiper>
   );
 }

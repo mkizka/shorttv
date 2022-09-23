@@ -9,8 +9,9 @@ body,
 }
 
 .player {
-  @apply w-full h-[calc(100%-100px)];
-  @apply md:w-[calc(100%-100px)] md:h-full;
+  @apply top-0 bottom-0 m-auto;
+  @apply w-full aspect-video;
+  @apply md:w-[calc(100%-100px)] md:aspect-video;
 }
 
 .player-container > .swiper-button-prev,

@@ -21,7 +21,7 @@ export function ClipPlayer({ clip, canShowPlayer, onLoad }: ClipPlayerProps) {
   });
 
   return (
-    <>
+    <div className="w-full h-full">
       {swiperSlide.isActive && (
         <iframe
           src={`${clip.embedUrl}&${params}`}
@@ -29,7 +29,7 @@ export function ClipPlayer({ clip, canShowPlayer, onLoad }: ClipPlayerProps) {
           allowFullScreen
           scrolling="no"
           onLoad={onLoad}
-          className="absolute bg-black player"
+          className="absolute player"
         />
       )}
       {(!swiperSlide.isActive || !canShowPlayer) && (
@@ -37,15 +37,15 @@ export function ClipPlayer({ clip, canShowPlayer, onLoad }: ClipPlayerProps) {
         <img
           src={clip.thumbnailUrl}
           alt={clip.title}
-          className=" absolute bg-black object-contain z-[1] player"
+          className="absolute bg-black object-contain z-[1] player"
         />
       )}
       {/* TODO: ローディングアイコンに置き換える */}
       {swiperSlide.isActive && !canShowPlayer && (
-        <div className=" absolute text-white opacity-30 z-[2] player">
+        <div className="absolute text-white opacity-30 z-[2] player">
           iframe loading...
         </div>
       )}
-    </>
+    </div>
   );
 }
