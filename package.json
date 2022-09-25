@@ -7,8 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "fetchStreams": "dotenv -- ts-node -P tsconfig.scripts.json src/scripts/fetchStreams.ts",
-    "fetchClips": "dotenv -- ts-node -P tsconfig.scripts.json src/scripts/fetchClips.ts",
+    "fetchStreams": "ts-node -P tsconfig.scripts.json src/scripts/fetchStreams.ts",
+    "fetchClips": "ts-node -P tsconfig.scripts.json src/scripts/fetchClips.ts",
     "postinstall": "prisma generate"
   },
   "dependencies": {
@@ -34,7 +34,6 @@
     "@typescript-eslint/eslint-plugin": "^5.33.0",
     "@typescript-eslint/parser": "^5.33.0",
     "autoprefixer": "^10.4.11",
-    "dotenv-cli": "^6.0.0",
     "eslint": "8.22.0",
     "eslint-config-next": "12.2.5",
     "postcss": "^8.4.16",
