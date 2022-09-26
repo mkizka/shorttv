@@ -13,8 +13,8 @@ body,
 }
 
 .player {
-  @apply w-full aspect-video;
-  @apply md:w-[calc(100%-100px)] md:aspect-video;
+  @apply w-full aspect-square;
+  @apply md:left-0 md:w-[calc(100%-100px)] md:aspect-video;
 }
 
 .player-container > .swiper-button-prev,

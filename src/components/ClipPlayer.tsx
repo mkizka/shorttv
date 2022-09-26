@@ -1,6 +1,6 @@
 import { Clip } from "@prisma/client";
 import { ReactEventHandler } from "react";
-import { useSwiper, useSwiperSlide } from "swiper/react";
+import { useSwiperSlide } from "swiper/react";
 
 export type ClipPlayerProps = {
   clip: Pick<Clip, "title" | "embedUrl" | "thumbnailUrl">;
@@ -9,22 +9,17 @@ export type ClipPlayerProps = {
 };
 
 export function ClipPlayer({ clip, canShowPlayer, onLoad }: ClipPlayerProps) {
-  const swiper = useSwiper();
   const swiperSlide = useSwiperSlide();
 
-  const params = new URLSearchParams({
-    parent: typeof location != "undefined" ? location.hostname : "",
-    // https://github.com/nolimits4web/swiper/blob/5465b6c3b7223bd34b031c10042ef86431b9c7d6/src/shared/get-device.js
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    autoplay: `${!(swiper.device.android || swiper.device.ios)}`,
-  });
+  const url = new URL(clip.embedUrl);
+  url.searchParams.append("parent", location.hostname);
+  url.searchParams.append("autoplay", "true");
 
   return (
     <div className="flex justify-center items-center w-full h-full">
       {swiperSlide.isActive && (
         <iframe
-          src={`${clip.embedUrl}&${params}`}
+          src={url.toString()}
           frameBorder="0"
           allowFullScreen
           scrolling="no"
