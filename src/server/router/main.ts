@@ -1,14 +1,24 @@
+import { z } from "zod";
+import { shuffle } from "shuffle-seed";
+import { Clip } from "@prisma/client";
 import { createRouter } from "./context";
-import { prisma } from "../db/client";
+
+// SQLiteではシード値を使ったランダムソートが出来ないので
+// 期間で数を絞って全部保持して、リクエスト時にshuffleする
+let cachedClips: Clip[] | undefined;
 
 export const mainRouter = createRouter() //
   .query("getClips", {
-    async resolve() {
-      return await prisma.clip.findMany({
-        where: {
-          duration: { lte: 20 },
-        },
-        take: 5,
-      });
+    input: z.object({ seed: z.string() }),
+    async resolve({ input, ctx: { prisma } }) {
+      if (cachedClips == undefined) {
+        cachedClips = await prisma.clip.findMany({
+          where: {
+            duration: { lte: 20 },
+          },
+          // TODO: 期間を絞る
+        });
+      }
+      return shuffle(cachedClips, input.seed).slice(0, 5);
     },
   });

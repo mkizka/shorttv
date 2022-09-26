@@ -11,6 +11,7 @@ specifiers:
   '@types/node': 18.0.0
   '@types/react': 18.0.14
   '@types/react-dom': 18.0.5
+  '@types/shuffle-seed': ^1.1.0
   '@typescript-eslint/eslint-plugin': ^5.33.0
   '@typescript-eslint/parser': ^5.33.0
   autoprefixer: ^10.4.11
@@ -22,6 +23,7 @@ specifiers:
   react: 18.2.0
   react-dom: 18.2.0
   react-query: 3.39.2
+  shuffle-seed: ^1.1.6
   superjson: ^1.10.0
   swiper: ^8.4.2
   tailwindcss: ^3.1.8
@@ -41,6 +43,7 @@ dependencies:
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
   react-query: 3.39.2_biqbaboplfbrettd7655fr4n2y
+  shuffle-seed: 1.1.6
   superjson: 1.10.0
   swiper: 8.4.2
   zod: 3.19.1
@@ -49,6 +52,7 @@ devDependencies:
   '@types/node': 18.0.0
   '@types/react': 18.0.14
   '@types/react-dom': 18.0.5
+  '@types/shuffle-seed': 1.1.0
   '@typescript-eslint/eslint-plugin': 5.38.0_kpaatme6gjkpxppst52s4fd23a
   '@typescript-eslint/parser': 5.38.0_4rv7y5c6xz3vfxwhbrcxxi73bq
   autoprefixer: 10.4.11_postcss@8.4.16
@@ -541,6 +545,10 @@ packages:
 
   /@types/scheduler/0.16.2:
     resolution: {integrity: sha512-hppQEBDmlwhFAXKJX2KnWLYu5yMfi91yazPb2l+lbJiwW+wdo1gNeRA+3RgNSO39WYX2euey41KEwnqesU2Jew==}
+    dev: true
+
+  /@types/shuffle-seed/1.1.0:
+    resolution: {integrity: sha512-h6UW72XuE07bSDVTkNjMMapFj6ERJmvf+RajssOoEIVhuU53/+zyCSBjBrSpDJSzVYjGr4CYxW3ABrY0C6s8qA==}
     dev: true
 
   /@typescript-eslint/eslint-plugin/5.38.0_kpaatme6gjkpxppst52s4fd23a:
@@ -2451,6 +2459,10 @@ packages:
       loose-envify: 1.4.0
     dev: false
 
+  /seedrandom/2.4.4:
+    resolution: {integrity: sha512-9A+PDmgm+2du77B5i0Ip2cxOqqHjgNxnBgglxLcX78A2D6c2rTo61z4jnVABpF4cKeDMDG+cmXXvdnqse2VqMA==}
+    dev: false
+
   /semver/6.3.0:
     resolution: {integrity: sha512-b39TBaTSfV6yBrapU89p5fKekE2m/NwnDocOVruQFS1/veMgdzuPcnOM34M6CwxW8jH/lxEa5rBoDeUwu5HHTw==}
     hasBin: true
@@ -2475,6 +2487,12 @@ packages:
     resolution: {integrity: sha512-7++dFhtcx3353uBaq8DDR4NuxBetBzC7ZQOhmTQInHEd6bSrXdiEyzCvG07Z44UYdLShWUyXt5M/yhz8ekcb1A==}
     engines: {node: '>=8'}
     dev: true
+
+  /shuffle-seed/1.1.6:
+    resolution: {integrity: sha512-Vr9wlwMKJVUeFNGyc4aNbrzkI568gkve7ykyJ+1/cz78j3yRlJODWU0CuJ/fmk3MCjvAClpnqlycd/Y53UG3UA==}
+    dependencies:
+      seedrandom: 2.4.4
+    dev: false
 
   /side-channel/1.0.4:
     resolution: {integrity: sha512-q5XPytqFEIKHkGdiMIrY10mvLRvnQh42/+GoBlFW3b2LXLE2xxJpZFdm94we0BaoV3RwJyGqg5wS7epxTv0Zvw==}
