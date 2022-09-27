@@ -9,7 +9,10 @@ let cachedClips: Clip[] | undefined;
 
 export const mainRouter = createRouter() //
   .query("getClips", {
-    input: z.object({ seed: z.string() }),
+    input: z.object({
+      seed: z.string(),
+      cursor: z.number().nullish(),
+    }),
     async resolve({ input, ctx: { prisma } }) {
       if (cachedClips == undefined) {
         cachedClips = await prisma.clip.findMany({
@@ -19,6 +22,15 @@ export const mainRouter = createRouter() //
           // TODO: 期間を絞る
         });
       }
-      return shuffle(cachedClips, input.seed).slice(0, 5);
+      const currentCursor = input.cursor ?? 0;
+      const nextCursor = currentCursor + 5;
+      return {
+        clips: shuffle(cachedClips, input.seed).slice(
+          currentCursor,
+          nextCursor
+        ),
+        nextCursor:
+          nextCursor < cachedClips.length - 1 ? nextCursor : undefined,
+      };
     },
   });

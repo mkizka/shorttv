@@ -1,4 +1,3 @@
-import { Clip } from "@prisma/client";
 import { useState, useEffect } from "react";
 import {
   Swiper as SwiperClass,
@@ -7,16 +6,17 @@ import {
   Navigation,
 } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { inferQueryOutput } from "../utils/trpc";
 
 import { ClipPlayer } from "./ClipPlayer";
 
 export type ClipPlayerContainerProps = {
-  clips: Clip[];
+  clipPages: inferQueryOutput<"main.getClips">[];
   updateClips: () => void;
 };
 
 export function ClipPlayerContainer({
-  clips,
+  clipPages,
   updateClips,
 }: ClipPlayerContainerProps) {
   const [iframeLoaded, setIframeLoaded] = useState(false);
@@ -47,23 +47,24 @@ export function ClipPlayerContainer({
       direction="vertical"
       onSlideChangeTransitionStart={(swiper: SwiperClass) => {
         setIframeLoaded(false);
-        if (swiper.activeIndex >= clips.length - 2) {
-          console.log("update", clips);
+        if (swiper.activeIndex >= swiper.slides.length - 2) {
           updateClips();
         }
       }}
       className="w-full flex-1 bg-black player-container"
     >
-      {clips.map((clip) => {
-        return (
-          <SwiperSlide key={clip.id}>
-            <ClipPlayer
-              clip={clip}
-              canShowPlayer={iframeLoaded}
-              onLoad={() => setIframeLoaded(true)}
-            />
-          </SwiperSlide>
-        );
+      {clipPages.map((page) => {
+        return page.clips.map((clip) => {
+          return (
+            <SwiperSlide key={clip.id}>
+              <ClipPlayer
+                clip={clip}
+                canShowPlayer={iframeLoaded}
+                onLoad={() => setIframeLoaded(true)}
+              />
+            </SwiperSlide>
+          );
+        });
       })}
     </Swiper>
   );

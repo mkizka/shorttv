@@ -8,18 +8,22 @@ const Index: NextPage = () => {
   const seedRef = useRef(Math.random().toString());
   // ClipPlayerContainerのfocusをiframeから剥がす処理で、
   // なぜかtrpcの再読み込みが呼ばれるので二度以上通信しないようにする
-  const clips = trpc.useQuery(["main.getClips", { seed: seedRef.current }], {
-    staleTime: Infinity,
-  });
+  const query = trpc.useInfiniteQuery(
+    ["main.getClips", { seed: seedRef.current }],
+    {
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+      staleTime: Infinity,
+    }
+  );
 
   return (
     <main className="flex flex-col h-full bg-black">
-      {!clips.data ? (
+      {!query.data ? (
         <p className="text-white">first loading...</p>
       ) : (
         <ClipPlayerContainer
-          clips={clips.data}
-          updateClips={() => console.log("update")}
+          clipPages={query.data.pages}
+          updateClips={() => query.fetchNextPage()}
         />
       )}
     </main>
