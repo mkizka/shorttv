@@ -37,10 +37,9 @@ FROM node:16-alpine AS runner
 ENV NODE_ENV production
 WORKDIR /app
 RUN addgroup --system --gid 1001 nodejs &&\
-  adduser --system --uid 1001 nextjs &&\
-  mkdir /app/prisma
+  adduser --system --uid 1001 nextjs
 # BUILDERで作ったDBは/app/prisma以下にあるべき
-COPY --from=builder --chown=nextjs:nodejs /app/prisma/db.sqlite ./prisma/
+COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
 COPY --from=builder --chown=nextjs:nodejs /app/next.config.mjs ./
 COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/package.json ./
